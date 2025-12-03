@@ -1,0 +1,30 @@
+package org.kathrynhuxtable.radiofreelawrence.game.grammar.tree;
+
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+import org.kathrynhuxtable.radiofreelawrence.game.GameData;
+import org.kathrynhuxtable.radiofreelawrence.game.exception.ContinueException;
+import org.kathrynhuxtable.radiofreelawrence.game.exception.GameRuntimeException;
+import org.kathrynhuxtable.radiofreelawrence.game.exception.LoopControlException.ControlType;
+
+@Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
+public class ContinueStatementNode implements StatementNode {
+	private String identifier;
+	private ControlType controlType;
+	private String label;
+
+	@Override
+	public void execute(GameData gameData) throws GameRuntimeException {
+		if (controlType != ControlType.CODE) {
+			throw new ContinueException(controlType);
+		} else {
+			throw new ContinueException(identifier);
+		}
+	}
+}
