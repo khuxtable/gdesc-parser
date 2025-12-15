@@ -18,7 +18,7 @@ action look {
         var youSee = true;
         for (var optr : here) {
             if (youSee) {
-                say("You see:");
+                say("");
                 youSee = false;
             }
             describe(optr);
@@ -37,15 +37,16 @@ action describe {
 action take {
     if (ishere(arg2)) {
         get(arg2);
-        quip("You take #.", arg2);
+        quip("You take the #.", arg2);
     } else {
         quip("I see no # here.", arg2);
     }
 }
 action drop {
     if (ishave(arg2)) {      // True only if the player has the thing
-        drop(arg2);          // Move the thing from player's inventory to cloakroom
-        quip("You drop #.", ARG2);
+        say("You drop the #.", ARG2);
+        drop(arg2);          // Move the thing from player's inventory to here
+        break repeat;
     } else {
        quip("You have no #", ARG2);
     }

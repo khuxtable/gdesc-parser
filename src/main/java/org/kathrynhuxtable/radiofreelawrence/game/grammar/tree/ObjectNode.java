@@ -13,8 +13,10 @@ public class ObjectNode implements BaseNode, HasRefno {
 	List<String> names;
 	boolean inVocabulary;
 
+	String inventoryDescription;
 	String briefDescription;
 	String longDescription;
+	BlockNode code;
 
 	int refno;
 }

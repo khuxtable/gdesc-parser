@@ -328,7 +328,7 @@ public class GameVisitor extends GameParserBaseVisitor<BaseNode> {
 				.inVocabulary("+".equals(ctx.getChild(1).toString()))
 				.briefDescription(briefDescription)
 				.longDescription(longDescription)
-				.code((BlockNode) visit(ctx.block()))
+				.code((BlockNode) visit(ctx.optBlock()))
 				.build();
 		if (node.isInVocabulary()) {
 			if (root.getVerbs().containsKey(node.getNames().get(0))) {
@@ -349,15 +349,18 @@ public class GameVisitor extends GameParserBaseVisitor<BaseNode> {
 
 	@Override
 	public ObjectNode visitObjectDirective(GameParser.ObjectDirectiveContext ctx) {
-		String briefDescription = ((TextElementNode) visit(ctx.textElement(0))).getText();
-		String longDescription = ctx.textElement(1) == null ? null : ((TextElementNode) visit(ctx.textElement(1))).getText();
+		String inventoryDescription = ((TextElementNode) visit(ctx.textElement(0))).getText();
+		String briefDescription = ctx.textElement(1) == null ? null : ((TextElementNode) visit(ctx.textElement(1))).getText();
+		String longDescription = ctx.textElement(2) == null ? null : ((TextElementNode) visit(ctx.textElement(2))).getText();
 		ObjectNode node = ObjectNode.builder()
 				.names(ctx.identifier().stream()
 						.map(i -> i.getText().toLowerCase())
 						.collect(Collectors.toList()))
 				.inVocabulary(!"-".equals(ctx.getChild(1).toString()))
+				.inventoryDescription(inventoryDescription)
 				.briefDescription(briefDescription)
 				.longDescription(longDescription)
+				.code((BlockNode) visit(ctx.optBlock()))
 				.build();
 		if (node.isInVocabulary()) {
 			if (root.getVerbs().containsKey(node.getNames().get(0))) {

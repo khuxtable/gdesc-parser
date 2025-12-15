@@ -51,9 +51,9 @@ directive
     | VARIABLE identifier identifier* SEMI                  #variableDirective
     | ARRAY identifier LBRACK numLiteral RBRACK SEMI        #arrayDirective
     | TEXT method? identifier textElement+ SEMI             #textDirective
-    | FRAGMENT method? identifier textElement+ SEMI          #fragmentDirective
-    | PLACE ADD? identifier identifier* textElement? textElement? block     #placeDirective
-    | OBJECT SUB? identifier identifier* textElement textElement? SEMI      #objectDirective
+    | FRAGMENT method? identifier textElement+ SEMI         #fragmentDirective
+    | PLACE ADD? identifier identifier* textElement? textElement? optBlock              #placeDirective
+    | OBJECT SUB? identifier identifier* textElement textElement? textElement? optBlock #objectDirective
     | ACTION arg1=identifier arg2=identifier? block         #actionDirective
     | PROC name=identifier identifier* block                #procDirective
     | INITIAL block                                         #initialDirective
@@ -78,6 +78,11 @@ method
     ;
 
 textElement : textBlock | textLiteral ;
+
+optBlock
+    : SEMI
+    | block
+    ;
 
 // Code block and expressions
 

@@ -1,42 +1,60 @@
 object axe
-    "a small axe";
+    "small axe"
+    "There is a small axe here.";
 object banana
-    "a slightly brown banana";
+    "slightly brown banana"
+    "There is a slightly brown banana here.";
 object book
-    "a book";
+    "book"
+    "There is a book here.";
 object box
     "a locked box";
 object chain
     "a length of chain";
 object coke
-    "a can of coke";
+    "coke can"
+    "There is a can of coke here.";
 object dagger
-    "a dagger";
+    "dagger"
+    "There is a dagger here.";
 object glove
-    "a silk glove";
+    "silk glove"
+    "There is a silk glove here.";
 object grenade
-    "a grenade"
-    "a grenade, which does not actually appear anywhere";
+    "grenade"
+    "There is a grenade here."
+    "A grenade, which does not actually appear anywhere";
 object gun
-    "a gun";
+    "gun"
+    "There is a gun here.";
 object hole
-    "a small hole";
+    "small hole"
+    "There is a small hole here.";
 object meter
-    "a life-force meter";
+    "life-force meter"
+    "There is a life-force meter here. Cannot be dropped.";
 object meteroid         // For wizard players
-    "a life-force meteroid";
+    "life-force meteroid"
+    "There is a life-force meteroid here. Cannot be dropped.";
 object rifle
-    "a rifle";
+    "rifle"
+    "There is a rifle here.";
 object sandwich
-    "a tasty looking sandwich";
+    "sandwich"
+    "There is a tasty looking sandwich here.";
 object sword
-    "a sword";
+    "sword"
+    "There is a sword here.";
 object truncheon
-    "a truncheon";
+    "truncheon"
+    "There is a truncheon here.";
 object token
-    "a melted bus token";
+    "bus token"
+    "There is a melted bus token here.";
 object udk
-    "a faded UDK"
+    "UDK"
+    "There is a faded UDK here."
     "a faded copy of the university newspaper, the \"University Daily Kansan\"";
 object zapgun
-    "a toy zapgun";
+    "zapgun"
+    "There is a toy zapgun here.";

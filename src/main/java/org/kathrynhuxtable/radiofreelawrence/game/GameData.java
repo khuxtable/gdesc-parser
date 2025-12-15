@@ -98,9 +98,14 @@ public class GameData {
 			boolean beenHere = testflag(placeNode.getRefno(), beenHereFlag);
 			return (!beenHere || type > 0) && placeNode.getLongDescription() != null ? placeNode.getLongDescription() : placeNode.getBriefDescription();
 		} else if (idNode instanceof ObjectNode objectNode) {
+			boolean inHand = locations[objectNode.getRefno() - fobj] == floc;
 			int seenFlag = getIntIdentifierValue("seen");
 			boolean seen = testflag(objectNode.getRefno(), seenFlag);
-			return (!seen || type > 0) && objectNode.getLongDescription() != null ? objectNode.getLongDescription() : objectNode.getBriefDescription();
+			if (inHand) {
+				return objectNode.getInventoryDescription();
+			} else {
+				return (!seen || type > 0) && objectNode.getLongDescription() != null ? objectNode.getLongDescription() : objectNode.getBriefDescription();
+			}
 		} else if (idNode instanceof VerbNode) {
 			return "???";//((VerbNode) idNode).getRefno();
 		} else if (idNode instanceof TextNode) {
@@ -116,9 +121,14 @@ public class GameData {
 			throw new GameRuntimeException("refno " + refno + " is not valid");
 		} else if (refno <= lobj) {
 			ObjectNode objectNode = objects[refno - fobj];
+			boolean inHand = locations[objectNode.getRefno() - fobj] == floc;
 			int seenFlag = getIntIdentifierValue("seen");
 			boolean seen = testflag(objectNode.getRefno(), seenFlag);
-			return (!seen || type > 0) && objectNode.getLongDescription() != null ? objectNode.getLongDescription() : objectNode.getBriefDescription();
+			if (inHand) {
+				return objectNode.getInventoryDescription();
+			} else {
+				return (!seen || type > 0) && objectNode.getLongDescription() != null ? objectNode.getLongDescription() : objectNode.getBriefDescription();
+			}
 		} else if (refno <= lloc) {
 			PlaceNode placeNode = places[refno - floc];
 			int beenHereFlag = getIntIdentifierValue("been.here");

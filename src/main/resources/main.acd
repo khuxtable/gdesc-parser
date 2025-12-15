@@ -40,7 +40,7 @@ repeat {
         var youSee = true;
         for (var optr : here) {
             if (youSee) {
-                say("You see:");
+                say("");
                 youSee = false;
             }
             describe(optr);
