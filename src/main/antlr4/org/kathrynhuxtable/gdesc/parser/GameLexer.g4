@@ -75,6 +75,42 @@ UNTIL       : 'until';
 VAR         : 'var';
 WHILE       : 'while';
 
+// Internal functions
+
+ANYOF : 'anyof' ;
+APPEND : 'append' ;
+APPORT : 'apport' ;
+ATPLACE : 'atplace' ;
+CHANCE : 'chance' ;
+CLEARFLAG : 'clearflag' ;
+DESCRIBE : 'describe' ;
+DROP : 'drop' ;
+FLUSH : 'flush' ;
+GET : 'get' ;
+GOTO : 'goto' ;
+INPUT : 'input' ;
+INRANGE : 'inrange' ;
+ISAT : 'isat' ;
+ISFLAG : 'isflag' ;
+ISHAVE : 'ishave' ;
+ISHERE : 'ishere' ;
+ISNEAR : 'isnear' ;
+KEY : 'key' ;
+MOVE : 'move' ;
+NEEDCMD : 'needcmd' ;
+QUERY : 'query' ;
+QUIP : 'quip' ;
+RESPOND : 'respond' ;
+SAY : 'say' ;
+SETFLAG : 'setflag' ;
+SMOVE : 'smove' ;
+STOP : 'stop' ;
+TIE : 'tie' ;
+TYPED : 'typed' ;
+VARIS : 'varis' ;
+VOCAB : 'vocab' ;
+
+
 // Literals
 
 NUM_LITERAL : [0-9]+ ;

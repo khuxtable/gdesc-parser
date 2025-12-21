@@ -386,6 +386,43 @@ arrayAccess
 functionInvocation
     : identifier LPAREN expression (COMMA expression)* RPAREN
     | identifier LPAREN RPAREN
+    | internalFunction LPAREN expression (COMMA expression)* RPAREN
+    | internalFunction LPAREN RPAREN
+    ;
+
+internalFunction
+    : ANYOF
+    | APPEND
+    | APPORT
+    | ATPLACE
+    | CHANCE
+    | CLEARFLAG
+    | DESCRIBE
+    | DROP
+    | FLUSH
+    | GET
+    | GOTO
+    | INPUT
+    | INRANGE
+    | ISAT
+    | ISFLAG
+    | ISHAVE
+    | ISHERE
+    | ISNEAR
+    | KEY
+    | MOVE
+    | NEEDCMD
+    | QUERY
+    | QUIP
+    | RESPOND
+    | SAY
+    | SETFLAG
+    | SMOVE
+    | STOP
+    | TIE
+    | TYPED
+    | VARIS
+    | VOCAB
     ;
 
 refExpression
