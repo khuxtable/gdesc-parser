@@ -1,4 +1,4 @@
-/*
+    /*
  [The "BSD licence"]
  Copyright (c) 2013 Terence Parr, Sam Harwell
  Copyright (c) 2017 Ivan Kochurkin (upgrade to Java 8)
@@ -39,26 +39,64 @@ game
 // Major language statements
 
 directive
-    : INCLUDE textLiteral (COMMA boolLiteral)? SEMI         #includePragma
-    | NAME textLiteral SEMI                                 #namePragma
-    | VERSION textLiteral SEMI                              #versionPragma
-    | DATE textLiteral SEMI                                 #datePragma
-    | AUTHOR textLiteral SEMI                               #authorPragma
-    | FLAGS flagType flagClause (COMMA flagClause)* SEMI    #flagDirective
-    | STATE stateClause (COMMA stateClause)* SEMI           #stateDirective
-    | NOISE identifier identifier* SEMI                     #noiseDirective
-    | VERB SUB? identifier identifier* SEMI                 #verbDirective
-    | VARIABLE identifier identifier* SEMI                  #variableDirective
-    | ARRAY identifier LBRACK numLiteral RBRACK SEMI        #arrayDirective
-    | TEXT method? identifier textElement+ SEMI             #textDirective
-    | FRAGMENT method? identifier textElement+ SEMI         #fragmentDirective
-    | PLACE ADD? identifier identifier* textElement? textElement? optBlock              #placeDirective
-    | OBJECT SUB? identifier identifier* textElement textElement? textElement? optBlock #objectDirective
-    | ACTION arg1=identifier arg2=identifier? block         #actionDirective
-    | PROC name=identifier identifier* block                #procDirective
-    | INITIAL block                                         #initialDirective
-    | REPEAT block                                          #repeatDirective
+    : includePragma
+    | namePragma
+    | versionPragma
+    | datePragma
+    | authorPragma
+    | flagDirective
+    | stateDirective
+    | noiseDirective
+    | verbDirective
+    | variableDirective
+    | arrayDirective
+    | textDirective
+    | fragmentDirective
+    | placeDirective
+    | objectDirective
+    | actionDirective
+    | procDirective
+    | initialDirective
+    | repeatDirective
     ;
+
+includePragma : INCLUDE STRING_LITERAL (COMMA BOOL_LITERAL)? SEMI ;
+
+namePragma : NAME STRING_LITERAL SEMI ;
+
+versionPragma : VERSION STRING_LITERAL SEMI ;
+
+datePragma : DATE STRING_LITERAL SEMI ;
+
+authorPragma : AUTHOR STRING_LITERAL SEMI ;
+
+flagDirective : FLAGS flagType flagClause (COMMA flagClause)* SEMI ;
+
+stateDirective : STATE stateClause (COMMA stateClause)* SEMI ;
+
+noiseDirective : NOISE IDENTIFIER (IDENTIFIER)* SEMI ;
+
+verbDirective : VERB SUB? IDENTIFIER (IDENTIFIER)* SEMI ;
+
+variableDirective : VARIABLE IDENTIFIER (IDENTIFIER)* SEMI ;
+
+arrayDirective : ARRAY IDENTIFIER LBRACK NUM_LITERAL RBRACK SEMI ;
+
+textDirective : TEXT method? IDENTIFIER textElement+ SEMI ;
+
+fragmentDirective : FRAGMENT method? IDENTIFIER textElement+ SEMI ;
+
+placeDirective : PLACE ADD? IDENTIFIER (IDENTIFIER)* textElement? textElement? optBlock ;
+
+objectDirective : OBJECT SUB? IDENTIFIER (IDENTIFIER)* textElement textElement? textElement? optBlock ;
+
+actionDirective : ACTION arg1=IDENTIFIER (arg2=IDENTIFIER)? block ;
+
+procDirective : PROC name=IDENTIFIER (IDENTIFIER)* block ;
+
+initialDirective : INITIAL block ;
+
+repeatDirective : REPEAT block ;
 
 flagType
     : VARIABLE
@@ -66,9 +104,9 @@ flagType
     | PLACE
     ;
 
-flagClause : identifier (EQUAL identifier)* ;
+flagClause : IDENTIFIER (EQUAL IDENTIFIER)* ;
 
-stateClause : identifier (EQUAL expression)? ;
+stateClause : IDENTIFIER (EQUAL expression)? ;
 
 method
     : INCREMENT
@@ -77,7 +115,7 @@ method
     | ASSIGNED
     ;
 
-textElement : textBlock | textLiteral ;
+textElement : TEXT_BLOCK | STRING_LITERAL ;
 
 optBlock
     : SEMI
@@ -127,7 +165,7 @@ localVariableDeclaration
     ;
 
 variableDeclarator
-    : identifier (EQUAL expression)?
+    : IDENTIFIER (EQUAL expression)?
     ;
 
 emptyStatement
@@ -135,11 +173,11 @@ emptyStatement
     ;
 
 labeledStatement
-    : identifier COLON statement
+    : IDENTIFIER COLON statement
     ;
 
 labeledStatementNoShortIf
-    : identifier COLON statementNoShortIf
+    : IDENTIFIER COLON statementNoShortIf
     ;
 
 expressionStatement
@@ -209,23 +247,23 @@ statementExpressionList
     ;
 
 enhancedForStatement
-    : FOR LPAREN VAR identifier COLON expression RPAREN statement
+    : FOR LPAREN VAR IDENTIFIER COLON expression RPAREN statement
     ;
 
 enhancedForStatementNoShortIf
-    : FOR LPAREN VAR identifier COLON expression RPAREN statementNoShortIf
+    : FOR LPAREN VAR IDENTIFIER COLON expression RPAREN statementNoShortIf
     ;
 
 breakStatement
     : BREAK PROC SEMI
     | BREAK REPEAT SEMI
-    | BREAK identifier? SEMI
+    | BREAK (IDENTIFIER)? SEMI
     ;
 
 continueStatement
     : CONTINUE PROC SEMI
     | CONTINUE REPEAT SEMI
-    | CONTINUE identifier? SEMI
+    | CONTINUE (IDENTIFIER)? SEMI
     ;
 
 returnStatement
@@ -246,7 +284,7 @@ assignment
     ;
 
 lvalue
-    : identifier
+    : identifierReference
     | arrayAccess
     ;
 
@@ -358,13 +396,17 @@ postIncrementOrDecrementExpression
     ;
 
 primary
-    : literal
-    | identifier
+    : identifierReference
+    | literal
     | parenthesizedExpression
     | arrayAccess
     | functionInvocation
     | refExpression
     | instanceofExpression
+    ;
+
+identifierReference
+    : IDENTIFIER
     ;
 
 literal
@@ -380,12 +422,12 @@ parenthesizedExpression
     ;
 
 arrayAccess
-    : identifier LBRACK expression RBRACK
+    : IDENTIFIER LBRACK expression RBRACK
     ;
 
 functionInvocation
-    : identifier LPAREN expression (COMMA expression)* RPAREN
-    | identifier LPAREN RPAREN
+    : IDENTIFIER LPAREN expression (COMMA expression)* RPAREN
+    | IDENTIFIER LPAREN RPAREN
     | internalFunction LPAREN expression (COMMA expression)* RPAREN
     | internalFunction LPAREN RPAREN
     ;
@@ -397,10 +439,10 @@ internalFunction
     | ATPLACE
     | CHANCE
     | CLEARFLAG
-    | DESCRIBE
-    | DROP
-    | FLUSH
-    | GET
+    | DESCRIBE_
+    | IDROP
+    | FLUSHINPUT
+    | IGET
     | GOTO
     | INPUT
     | INRANGE
@@ -410,27 +452,27 @@ internalFunction
     | ISHERE
     | ISNEAR
     | KEY
-    | MOVE
+    | MOVE_
     | NEEDCMD
-    | QUERY
+    | GETQUERY
     | QUIP
     | RESPOND
-    | SAY
+    | SAY_
     | SETFLAG
     | SMOVE
     | STOP
     | TIE
-    | TYPED
+    | USERTYPED
     | VARIS
     | VOCAB
     ;
 
 refExpression
-    : REF identifier
+    : REF IDENTIFIER
     ;
 
 instanceofExpression
-    : identifier INSTANCEOF refType
+    : IDENTIFIER INSTANCEOF refType
     ;
 
 refType
@@ -440,17 +482,3 @@ refType
     | TEXT
     | VERB
     ;
-
-// Evaluate lexer elements
-
-numLiteral : NUM_LITERAL ;
-
-boolLiteral : BOOL_LITERAL ;
-
-textLiteral : STRING_LITERAL ;
-
-textBlock : TEXT_BLOCK ;
-
-identifier : IDENTIFIER ;
-
-character : CHAR_LITERAL ;

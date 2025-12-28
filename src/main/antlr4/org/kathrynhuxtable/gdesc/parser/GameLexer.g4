@@ -33,7 +33,6 @@ lexer grammar GameLexer;
 // Majar directive keywords
 
 INCLUDE : 'include' ;
-INCLUDEOPT : 'include?' ;
 NAME : 'name' ;
 VERSION : 'version' ;
 DATE : 'date' ;
@@ -83,10 +82,10 @@ APPORT : 'apport' ;
 ATPLACE : 'atplace' ;
 CHANCE : 'chance' ;
 CLEARFLAG : 'clearflag' ;
-DESCRIBE : 'describe' ;
-DROP : 'drop' ;
-FLUSH : 'flush' ;
-GET : 'get' ;
+DESCRIBE_ : 'describe_' ;
+IDROP : 'idrop' ;
+FLUSHINPUT : 'flushinput' ;
+IGET : 'iget' ;
 GOTO : 'goto' ;
 INPUT : 'input' ;
 INRANGE : 'inrange' ;
@@ -96,17 +95,17 @@ ISHAVE : 'ishave' ;
 ISHERE : 'ishere' ;
 ISNEAR : 'isnear' ;
 KEY : 'key' ;
-MOVE : 'move' ;
+MOVE_ : 'move_' ;
 NEEDCMD : 'needcmd' ;
-QUERY : 'query' ;
+GETQUERY : 'getquery' ;
 QUIP : 'quip' ;
 RESPOND : 'respond' ;
-SAY : 'say' ;
+SAY_ : 'say_' ;
 SETFLAG : 'setflag' ;
 SMOVE : 'smove' ;
 STOP : 'stop' ;
 TIE : 'tie' ;
-TYPED : 'typed' ;
+USERTYPED : 'usertyped' ;
 VARIS : 'varis' ;
 VOCAB : 'vocab' ;
 
@@ -214,3 +213,13 @@ fragment Letter:
     | ~[\u0000-\u007F\uD800-\uDBFF]   // covers all characters above 0x7F which are not a surrogate
     | [\uD800-\uDBFF] [\uDC00-\uDFFF] // covers UTF-16 surrogate pairs encodings for U+10000 to U+10FFFF
 ;
+
+/** "catch all" rule for any char not matche in a token rule of your
+ *  grammar. Lexers in Intellij must return all tokens good and bad.
+ *  There must be a token to cover all characters, which makes sense, for
+ *  an IDE. The parser however should not see these bad tokens because
+ *  it just confuses the issue. Hence, the hidden channel.
+ */
+ERRCHAR
+	:	.	-> channel(HIDDEN)
+	;
