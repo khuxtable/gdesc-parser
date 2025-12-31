@@ -65,28 +65,28 @@ WHILE       : 'while';
 ANYOF : 'anyof' ;
 APPEND : 'append' ;
 APPORT : 'apport' ;
-ATPLACE : 'atplace' ;
+ATPLACE : 'at' ;
 CHANCE : 'chance' ;
 CLEARFLAG : 'clearflag' ;
-DESCRIBE_ : 'describe_' ;
-IDROP : 'idrop' ;
-FLUSHINPUT : 'flushinput' ;
-IGET : 'iget' ;
+DESCRIBE : 'describe' ;
+DROP : 'drop' ;
+FLUSH : 'flush' ;
+GET : 'get' ;
 GOTO : 'goto' ;
 INPUT : 'input' ;
-INRANGE : 'inrange' ;
+IN : 'in' ;
 ISAT : 'isat' ;
-ISFLAG : 'isflag' ;
-ISHAVE : 'ishave' ;
-ISHERE : 'ishere' ;
-ISNEAR : 'isnear' ;
+FLAG : 'flag' ;
+HAVE : 'have' ;
+HERE : 'here' ;
+NEAR : 'near' ;
 KEY : 'key' ;
-MOVE_ : 'move_' ;
+MOVE : 'move' ;
 NEEDCMD : 'needcmd' ;
-GETQUERY : 'getquery' ;
+QUERY : 'query' ;
 QUIP : 'quip' ;
 RESPOND : 'respond' ;
-SAY_ : 'say_' ;
+SAY : 'say' ;
 SETFLAG : 'setflag' ;
 SMOVE : 'smove' ;
 STOP : 'stop' ;
@@ -95,26 +95,19 @@ USERTYPED : 'usertyped' ;
 VARIS : 'varis' ;
 VOCAB : 'vocab' ;
 
-
 // Literals
 
 NUM_LITERAL : [0-9]+ ;
-/*
-DECIMAL_LITERAL : ('0' | [1-9] (Digits? | ('_'+ Digits)+));
-HEX_LITERAL     : '0' [xX] [0-9a-fA-F] ([0-9a-fA-F_]* [0-9a-fA-F])?;
-OCT_LITERAL     : '0' [oO] '_'* [0-7] ([0-7_]* [0-7])?;
-BINARY_LITERAL  : '0' [bB] [01] ([01_]* [01])?;
-*/
 
 BOOL_LITERAL: 'true' | 'false';
+
+NULL_LITERAL: 'null';
 
 CHAR_LITERAL: '\'' (~['\\\r\n] | EscapeSequence) '\'';
 
 STRING_LITERAL: '"' (~["\\\r\n] | EscapeSequence)* '"';
 
 TEXT_BLOCK: '"""' [ \t]* [\r\n] (. | EscapeSequence)*? '"""';
-
-NULL_LITERAL: 'null';
 
 // Separators
 
@@ -176,7 +169,7 @@ LINE_COMMENT : '//' ~[\r\n]*    -> channel(HIDDEN);
 
 // Identifiers
 
-IDENTIFIER: Letter LetterOrDigit*;
+IDENTIFIER: Letter IdentifierCharacter*;
 
 // Fragment rules
 
@@ -192,13 +185,13 @@ fragment HexDigit: [0-9a-fA-F];
 
 fragment Digits: [0-9]+;
 
-fragment LetterOrDigit: Letter | [0-9] | '.';
+fragment IdentifierCharacter: Letter | [0-9] | '.';
 
 fragment Letter:
     [a-zA-Z$_]                        // these are the "java letters" below 0x7F
     | ~[\u0000-\u007F\uD800-\uDBFF]   // covers all characters above 0x7F which are not a surrogate
     | [\uD800-\uDBFF] [\uDC00-\uDFFF] // covers UTF-16 surrogate pairs encodings for U+10000 to U+10FFFF
-;
+    ;
 
 /** "catch all" rule for any char not matche in a token rule of your
  *  grammar. Lexers in Intellij must return all tokens good and bad.
@@ -207,5 +200,5 @@ fragment Letter:
  *  it just confuses the issue. Hence, the hidden channel.
  */
 ERRCHAR
-	:	.	-> channel(HIDDEN)
+	: . -> channel(HIDDEN)
 	;

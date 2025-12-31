@@ -72,9 +72,9 @@ textDirective : TEXT method? IDENTIFIER textElement+ SEMI ;
 
 fragmentDirective : FRAGMENT method? IDENTIFIER textElement+ SEMI ;
 
-placeDirective : PLACE ADD? IDENTIFIER (IDENTIFIER)* textElement? textElement? optBlock ;
+placeDirective : PLACE ADD? IDENTIFIER (IDENTIFIER)* textElement? textElement? optionalBlock ;
 
-objectDirective : OBJECT SUB? IDENTIFIER (IDENTIFIER)* textElement textElement? textElement? optBlock ;
+objectDirective : OBJECT SUB? IDENTIFIER (IDENTIFIER)* textElement textElement? textElement? optionalBlock ;
 
 actionDirective : ACTION arg1=IDENTIFIER (arg2=IDENTIFIER)? block ;
 
@@ -103,43 +103,35 @@ method
 
 textElement : TEXT_BLOCK | STRING_LITERAL ;
 
-optBlock
+optionalBlock
     : SEMI
     | block
     ;
 
-// Code block and expressions
+// Code block and statements
 
 block
     : LBRACE statement* RBRACE
     ;
 
 statement
-    : statementWithoutTrailingSubstatement
-    | labeledStatement
-    | ifThenStatement
-    | ifThenElseStatement
-    | whileStatement
-    | forStatement
-    ;
-
-statementNoShortIf
-    : statementWithoutTrailingSubstatement
-    | labeledStatementNoShortIf
-    | ifThenElseStatementNoShortIf
-    | whileStatementNoShortIf
-    | forStatementNoShortIf
-    ;
-
-statementWithoutTrailingSubstatement
     : block
-    | localVariableDeclarationStatement
     | emptyStatement
+    | localVariableDeclarationStatement
     | expressionStatement
-    | repeatStatement
     | breakStatement
     | continueStatement
     | returnStatement
+    | ifThenStatement
+    | ifThenElseStatement
+    | whileStatement
+    | repeatStatement
+    | basicForStatement
+    | enhancedForStatement
+    ;
+
+emptyStatement
+    : SEMI
     ;
 
 localVariableDeclarationStatement
@@ -154,18 +146,6 @@ variableDeclarator
     : IDENTIFIER (EQUAL expression)?
     ;
 
-emptyStatement
-    : SEMI
-    ;
-
-labeledStatement
-    : IDENTIFIER COLON statement
-    ;
-
-labeledStatementNoShortIf
-    : IDENTIFIER COLON statementNoShortIf
-    ;
-
 expressionStatement
     : statementExpression SEMI
     ;
@@ -178,45 +158,23 @@ statementExpression
     ;
 
 ifThenStatement
-    : IF LPAREN expression RPAREN statement
+    : IF LPAREN expression RPAREN block
     ;
 
 ifThenElseStatement
-    : IF LPAREN expression RPAREN statementNoShortIf ELSE statement
-    ;
-
-ifThenElseStatementNoShortIf
-    : IF LPAREN expression RPAREN statementNoShortIf ELSE statementNoShortIf
+    : IF LPAREN expression RPAREN block ELSE block
     ;
 
 whileStatement
-    : WHILE LPAREN expression RPAREN statement
-    ;
-
-whileStatementNoShortIf
-    : WHILE LPAREN expression RPAREN statementNoShortIf
+    : optionalLabel WHILE LPAREN expression RPAREN block
     ;
 
 repeatStatement
-    : REPEAT statement UNTIL LPAREN expression RPAREN SEMI
-    ;
-
-forStatement
-    : basicForStatement
-    | enhancedForStatement
-    ;
-
-forStatementNoShortIf
-    : basicForStatementNoShortIf
-    | enhancedForStatementNoShortIf
+    : optionalLabel REPEAT block UNTIL LPAREN expression RPAREN SEMI
     ;
 
 basicForStatement
-    : FOR LPAREN forInit? SEMI expression? SEMI forUpdate? RPAREN statement
-    ;
-
-basicForStatementNoShortIf
-    : FOR LPAREN forInit? SEMI expression? SEMI forUpdate? RPAREN statementNoShortIf
+    : optionalLabel FOR LPAREN forInit? SEMI expression? SEMI forUpdate? RPAREN block
     ;
 
 forInit
@@ -233,11 +191,11 @@ statementExpressionList
     ;
 
 enhancedForStatement
-    : FOR LPAREN VAR IDENTIFIER COLON expression RPAREN statement
+    : optionalLabel FOR LPAREN VAR IDENTIFIER COLON expression RPAREN block
     ;
 
-enhancedForStatementNoShortIf
-    : FOR LPAREN VAR IDENTIFIER COLON expression RPAREN statementNoShortIf
+optionalLabel
+    : IDENTIFIER COLON
     ;
 
 breakStatement
@@ -257,7 +215,7 @@ returnStatement
     ;
 
 /*
- * Productions from §15 (Expressions)
+ * Expressions
  */
 
 expression
@@ -412,10 +370,13 @@ arrayAccess
     ;
 
 functionInvocation
-    : IDENTIFIER LPAREN expression (COMMA expression)* RPAREN
-    | IDENTIFIER LPAREN RPAREN
-    | internalFunction LPAREN expression (COMMA expression)* RPAREN
-    | internalFunction LPAREN RPAREN
+    : IDENTIFIER LPAREN expressionList? RPAREN
+    | STRING_LITERAL LPAREN expressionList? RPAREN
+    | internalFunction LPAREN expressionList? RPAREN
+    ;
+
+expressionList
+    : expression (COMMA expression)*
     ;
 
 internalFunction
@@ -425,25 +386,25 @@ internalFunction
     | ATPLACE
     | CHANCE
     | CLEARFLAG
-    | DESCRIBE_
-    | IDROP
-    | FLUSHINPUT
-    | IGET
+    | DESCRIBE
+    | DROP
+    | FLUSH
+    | GET
     | GOTO
     | INPUT
-    | INRANGE
+    | IN
     | ISAT
-    | ISFLAG
-    | ISHAVE
-    | ISHERE
-    | ISNEAR
+    | FLAG
+    | HAVE
+    | HERE
+    | NEAR
     | KEY
-    | MOVE_
+    | MOVE
     | NEEDCMD
-    | GETQUERY
+    | QUERY
     | QUIP
     | RESPOND
-    | SAY_
+    | SAY
     | SETFLAG
     | SMOVE
     | STOP
