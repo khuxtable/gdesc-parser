@@ -19,10 +19,7 @@ lexer grammar GameLexer;
 // Majar directive keywords
 
 INCLUDE : 'include' ;
-NAME : 'name' ;
-VERSION : 'version' ;
-DATE : 'date' ;
-AUTHOR : 'author' ;
+INFO : 'info' ;
 FLAGS : 'flags' ;
 STATE : ('state' | 'constant') ;
 TEXT : 'text' ;
@@ -76,10 +73,10 @@ GOTO : 'goto' ;
 INPUT : 'input' ;
 IN : 'in' ;
 ISAT : 'isat' ;
-FLAG : 'flag' ;
+ISFLAG : 'isflag' ;
 HAVE : 'have' ;
-HERE : 'here' ;
-NEAR : 'near' ;
+ISHEAR : 'ishere' ;
+ISNEAR : 'isnear' ;
 KEY : 'key' ;
 MOVE : 'move' ;
 NEEDCMD : 'needcmd' ;

@@ -26,16 +26,12 @@ game
 
 directive
     : includePragma
-    | namePragma
-    | versionPragma
-    | datePragma
-    | authorPragma
+    | infoPragma
     | flagDirective
     | stateDirective
     | noiseDirective
     | verbDirective
     | variableDirective
-    | arrayDirective
     | textDirective
     | fragmentDirective
     | placeDirective
@@ -48,41 +44,37 @@ directive
 
 includePragma : INCLUDE STRING_LITERAL (COMMA BOOL_LITERAL)? SEMI ;
 
-namePragma : NAME STRING_LITERAL SEMI ;
-
-versionPragma : VERSION STRING_LITERAL SEMI ;
-
-datePragma : DATE STRING_LITERAL SEMI ;
-
-authorPragma : AUTHOR STRING_LITERAL SEMI ;
+infoPragma : INFO gameDescriptor (COMMA gameDescriptor)* SEMI ;
 
 flagDirective : FLAGS flagType flagClause (COMMA flagClause)* SEMI ;
 
 stateDirective : STATE stateClause (COMMA stateClause)* SEMI ;
 
-noiseDirective : NOISE IDENTIFIER (IDENTIFIER)* SEMI ;
+noiseDirective : NOISE verb (verb)* SEMI ;
 
-verbDirective : VERB SUB? IDENTIFIER (IDENTIFIER)* SEMI ;
+verbDirective : VERB verb (verb)* SEMI ;
 
-variableDirective : VARIABLE IDENTIFIER (IDENTIFIER)* SEMI ;
-
-arrayDirective : ARRAY IDENTIFIER LBRACK NUM_LITERAL RBRACK SEMI ;
+variableDirective : VARIABLE globalDeclarator (COMMA globalDeclarator)* SEMI ;
 
 textDirective : TEXT method? IDENTIFIER textElement+ SEMI ;
 
 fragmentDirective : FRAGMENT method? IDENTIFIER textElement+ SEMI ;
 
-placeDirective : PLACE ADD? IDENTIFIER (IDENTIFIER)* textElement? textElement? optionalBlock ;
+placeDirective : PLACE IDENTIFIER (EQUAL verb)* textElement? textElement? optionalBlock ;
 
-objectDirective : OBJECT SUB? IDENTIFIER (IDENTIFIER)* textElement textElement? textElement? optionalBlock ;
+objectDirective : OBJECT SUB? IDENTIFIER (EQUAL verb)* textElement textElement? textElement? optionalBlock ;
 
-actionDirective : ACTION arg1=IDENTIFIER (arg2=IDENTIFIER)? block ;
+actionDirective : ACTION arg1=verb (arg2=verb)? block ;
 
 procDirective : PROC name=IDENTIFIER (IDENTIFIER)* block ;
 
 initialDirective : INITIAL block ;
 
 repeatDirective : REPEAT block ;
+
+gameDescriptor
+    : IDENTIFIER COLON STRING_LITERAL
+    ;
 
 flagType
     : VARIABLE
@@ -93,6 +85,13 @@ flagType
 flagClause : IDENTIFIER (EQUAL IDENTIFIER)* ;
 
 stateClause : IDENTIFIER (EQUAL expression)? ;
+
+verb : STRING_LITERAL ;
+
+globalDeclarator
+    : IDENTIFIER
+    | IDENTIFIER LBRACK NUM_LITERAL RBRACK
+    ;
 
 method
     : INCREMENT
@@ -195,7 +194,8 @@ enhancedForStatement
     ;
 
 optionalLabel
-    : IDENTIFIER COLON
+    :
+    | IDENTIFIER COLON
     ;
 
 breakStatement
@@ -277,22 +277,18 @@ exclusiveOrExpression
     ;
 
 andExpression
-    : equalityExpression
-    | andExpression BITAND equalityExpression
-    ;
-
-equalityExpression
     : relationalExpression
-    | equalityExpression EQUALS relationalExpression
-    | equalityExpression NOTEQUALS relationalExpression
+    | andExpression BITAND relationalExpression
     ;
 
 relationalExpression
     : shiftExpression
-    | relationalExpression LT shiftExpression
-    | relationalExpression GT shiftExpression
-    | relationalExpression LE shiftExpression
-    | relationalExpression GE shiftExpression
+    | shiftExpression EQUALS shiftExpression
+    | shiftExpression NOTEQUALS shiftExpression
+    | shiftExpression LT shiftExpression
+    | shiftExpression GT shiftExpression
+    | shiftExpression LE shiftExpression
+    | shiftExpression GE shiftExpression
     ;
 
 shiftExpression
@@ -323,7 +319,7 @@ unaryExpression
     ;
 
 preIncrementOrDecrementExpression
-    : INC  unaryExpression
+    : INC unaryExpression
     | DEC unaryExpression
     ;
 
@@ -370,13 +366,14 @@ arrayAccess
     ;
 
 functionInvocation
-    : IDENTIFIER LPAREN expressionList? RPAREN
-    | STRING_LITERAL LPAREN expressionList? RPAREN
-    | internalFunction LPAREN expressionList? RPAREN
+    : IDENTIFIER LPAREN optionalExpressionList RPAREN
+    | STRING_LITERAL LPAREN optionalExpressionList RPAREN
+    | internalFunction LPAREN optionalExpressionList RPAREN
     ;
 
-expressionList
-    : expression (COMMA expression)*
+optionalExpressionList
+    :
+    | expression (COMMA expression)*
     ;
 
 internalFunction
@@ -394,10 +391,10 @@ internalFunction
     | INPUT
     | IN
     | ISAT
-    | FLAG
+    | ISFLAG
     | HAVE
-    | HERE
-    | NEAR
+    | ISHEAR
+    | ISNEAR
     | KEY
     | MOVE
     | NEEDCMD
