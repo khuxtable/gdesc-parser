@@ -121,8 +121,7 @@ statement
     | breakStatement
     | continueStatement
     | returnStatement
-    | ifThenStatement
-    | ifThenElseStatement
+    | ifStatement
     | whileStatement
     | repeatStatement
     | basicForStatement
@@ -156,12 +155,8 @@ statementExpression
     | functionInvocation
     ;
 
-ifThenStatement
-    : IF LPAREN expression RPAREN block
-    ;
-
-ifThenElseStatement
-    : IF LPAREN expression RPAREN block ELSE block
+ifStatement
+    : IF LPAREN expression RPAREN block (ELSE IF LPAREN expression RPAREN block)* (ELSE block)?
     ;
 
 whileStatement
@@ -199,15 +194,11 @@ optionalLabel
     ;
 
 breakStatement
-    : BREAK PROC SEMI
-    | BREAK REPEAT SEMI
-    | BREAK (IDENTIFIER)? SEMI
+    : BREAK (PROC | REPEAT | IDENTIFIER)? SEMI
     ;
 
 continueStatement
-    : CONTINUE PROC SEMI
-    | CONTINUE REPEAT SEMI
-    | CONTINUE (IDENTIFIER)? SEMI
+    : CONTINUE (PROC | REPEAT | IDENTIFIER)? SEMI
     ;
 
 returnStatement
@@ -283,12 +274,16 @@ andExpression
 
 relationalExpression
     : shiftExpression
-    | shiftExpression EQUALS shiftExpression
-    | shiftExpression NOTEQUALS shiftExpression
-    | shiftExpression LT shiftExpression
-    | shiftExpression GT shiftExpression
-    | shiftExpression LE shiftExpression
-    | shiftExpression GE shiftExpression
+    | shiftExpression relationalOperator shiftExpression
+    ;
+
+relationalOperator
+    : EQUALS
+    | NOTEQUALS
+    | LT
+    | GT
+    | LE
+    | GE
     ;
 
 shiftExpression
