@@ -100,9 +100,9 @@ BOOL_LITERAL: 'true' | 'false';
 
 NULL_LITERAL: 'null';
 
-CHAR_LITERAL: '\'' (~['\\\r\n] | EscapeSequence) '\'';
+CHAR_LITERAL: '\'' (~['\\\r\n] | EscapeSequence)* '\''?;
 
-STRING_LITERAL: '"' (~["\\\r\n] | EscapeSequence)* '"';
+STRING_LITERAL: '"' (~["\\\r\n] | EscapeSequence)* '"'?;
 
 TEXT_BLOCK: '"""' [ \t]* [\r\n] (. | EscapeSequence)*? '"""';
 
