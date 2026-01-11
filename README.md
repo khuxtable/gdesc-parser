@@ -18,11 +18,6 @@ objects, places, and variables. It enables implementing
 a lot more game logic in the game language rather than in
 custom code in the game's kernel.
 
-## Architecture
+## GDesc - Game Description Language
 
-This project creates a Visitor interface that the game
-can implement to construct its semantic tree.
-
-The plugin does not make use of this interface,
-because the IntelliJ AST scheme doesn't use Antlr
-typically.
+See the [gdesc.md](gdesc.md) file.
