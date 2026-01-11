@@ -75,7 +75,7 @@ IN : 'in' ;
 ISAT : 'isat' ;
 ISFLAG : 'isflag' ;
 HAVE : 'have' ;
-ISHEAR : 'ishere' ;
+ISHERE : 'ishere' ;
 ISNEAR : 'isnear' ;
 KEY : 'key' ;
 MOVE : 'move' ;

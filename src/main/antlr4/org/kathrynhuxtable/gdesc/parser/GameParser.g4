@@ -388,7 +388,7 @@ internalFunction
     | ISAT
     | ISFLAG
     | HAVE
-    | ISHEAR
+    | ISHERE
     | ISNEAR
     | KEY
     | MOVE
