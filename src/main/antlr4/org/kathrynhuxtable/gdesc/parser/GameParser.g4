@@ -390,6 +390,7 @@ internalFunction
     | HAVE
     | ISHERE
     | ISNEAR
+    | ISVERB
     | KEY
     | MOVE
     | NEEDCMD

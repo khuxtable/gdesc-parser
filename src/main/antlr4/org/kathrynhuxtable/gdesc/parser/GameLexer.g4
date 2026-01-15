@@ -77,6 +77,7 @@ ISFLAG : 'isflag' ;
 HAVE : 'have' ;
 ISHERE : 'ishere' ;
 ISNEAR : 'isnear' ;
+ISVERB : 'isverb' ;
 KEY : 'key' ;
 MOVE : 'move' ;
 NEEDCMD : 'needcmd' ;
