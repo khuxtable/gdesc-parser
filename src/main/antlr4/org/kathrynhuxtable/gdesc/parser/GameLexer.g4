@@ -49,7 +49,6 @@ ELSE        : 'else';
 FOR         : 'for';
 IF          : 'if';
 INSTANCEOF  : 'instanceof';
-REF         : 'ref';
 RETURN      : 'return';
 SWITCH      : 'switch';
 TO          : 'to';

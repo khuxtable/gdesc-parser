@@ -321,6 +321,8 @@ preIncrementOrDecrementExpression
 unaryExpressionNotPlusMinus
     : primary
     | postIncrementOrDecrementExpression
+    | refExpression
+    | derefExpression
     | TILDE unaryExpression
     | BANG unaryExpression
     ;
@@ -336,7 +338,6 @@ primary
     | parenthesizedExpression
     | arrayAccess
     | functionInvocation
-    | refExpression
     | instanceofExpression
     ;
 
@@ -408,7 +409,11 @@ internalFunction
     ;
 
 refExpression
-    : REF IDENTIFIER
+    : BITAND IDENTIFIER
+    ;
+
+derefExpression
+    : MUL IDENTIFIER
     ;
 
 instanceofExpression
