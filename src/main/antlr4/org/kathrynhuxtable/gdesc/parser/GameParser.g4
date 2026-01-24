@@ -397,6 +397,7 @@ internalFunction
     | NEEDCMD
     | QUERY
     | QUIP
+    | GETRANDOM
     | RESPOND
     | SAY
     | SETFLAG

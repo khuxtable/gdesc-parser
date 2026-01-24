@@ -82,6 +82,7 @@ MOVE : 'move' ;
 NEEDCMD : 'needcmd' ;
 QUERY : 'query' ;
 QUIP : 'quip' ;
+GETRANDOM : 'getrandom' ;
 RESPOND : 'respond' ;
 SAY : 'say' ;
 SETFLAG : 'setflag' ;
