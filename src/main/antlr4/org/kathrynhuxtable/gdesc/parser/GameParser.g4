@@ -220,6 +220,7 @@ assignment
 
 lvalue
     : identifierReference
+    | derefExpression
     | arrayAccess
     ;
 
