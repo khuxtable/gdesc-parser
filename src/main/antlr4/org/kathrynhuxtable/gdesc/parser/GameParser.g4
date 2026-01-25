@@ -60,13 +60,13 @@ textDirective : TEXT method? IDENTIFIER textElement+ SEMI ;
 
 fragmentDirective : FRAGMENT method? IDENTIFIER textElement+ SEMI ;
 
-placeDirective : PLACE IDENTIFIER (EQUAL verb)* textElement? textElement? optionalBlock ;
+placeDirective : PLACE IDENTIFIER (EQUAL verb)* textElement? textElement? LBRACE verbCommand* RBRACE ;
 
-objectDirective : OBJECT SUB? IDENTIFIER (EQUAL verb)* textElement textElement? textElement? optionalBlock ;
+objectDirective : OBJECT SUB? IDENTIFIER (EQUAL verb)* textElement textElement? textElement? LBRACE verbCommand* RBRACE ;
 
 actionDirective : ACTION arg1=verb (arg2=verb)? block ;
 
-procDirective : PROC name=IDENTIFIER (IDENTIFIER)* block ;
+procDirective : PROC name=IDENTIFIER optionalParameterList? block ;
 
 initialDirective : INITIAL block ;
 
@@ -102,9 +102,12 @@ method
 
 textElement : TEXT_BLOCK | STRING_LITERAL ;
 
-optionalBlock
-    : SEMI
-    | block
+verbCommand : verb COLON block ;
+
+
+optionalParameterList
+    : LPAREN RPAREN
+    | LPAREN IDENTIFIER (COMMA IDENTIFIER)* RPAREN
     ;
 
 // Code block and statements
