@@ -404,6 +404,7 @@ internalFunction
     | GETRANDOM
     | RESPOND
     | SAY
+    | SAYRANDOM
     | SETFLAG
     | SMOVE
     | STOP

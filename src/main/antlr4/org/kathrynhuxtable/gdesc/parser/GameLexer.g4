@@ -85,6 +85,7 @@ QUIP : 'quip' ;
 GETRANDOM : 'getrandom' ;
 RESPOND : 'respond' ;
 SAY : 'say' ;
+SAYRANDOM : 'sayrandom' ;
 SETFLAG : 'setflag' ;
 SMOVE : 'smove' ;
 STOP : 'stop' ;
