@@ -19,7 +19,7 @@ parser grammar GameParser;
 options { tokenVocab = GameLexer; }
 
 game
-	:	directive+ EOF
+	: directive+ EOF
 	;
 
 // Major language statements
@@ -32,6 +32,7 @@ directive
     | noiseDirective
     | verbDirective
     | variableDirective
+    | referenceDirective
     | textDirective
     | fragmentDirective
     | placeDirective
@@ -46,9 +47,9 @@ includePragma : INCLUDE STRING_LITERAL (COMMA BOOL_LITERAL)? SEMI ;
 
 infoPragma : INFO gameDescriptor (COMMA gameDescriptor)* SEMI ;
 
-flagDirective : FLAGS flagType flagClause (COMMA flagClause)* SEMI ;
+flagDirective : FLAGS flagType flagDeclarator (COMMA flagDeclarator)* SEMI ;
 
-stateDirective : STATE stateClause (COMMA stateClause)* SEMI ;
+stateDirective : STATE stateDeclarator (COMMA stateDeclarator)* SEMI ;
 
 noiseDirective : NOISE verb (verb)* SEMI ;
 
@@ -56,13 +57,15 @@ verbDirective : VERB verb (verb)* SEMI ;
 
 variableDirective : VARIABLE globalDeclarator (COMMA globalDeclarator)* SEMI ;
 
+referenceDirective : REFERENCE referenceDeclarator (COMMA referenceDeclarator)* SEMI ;
+
 textDirective : TEXT method? IDENTIFIER textElement+ SEMI ;
 
 fragmentDirective : FRAGMENT method? IDENTIFIER textElement+ SEMI ;
 
-placeDirective : PLACE IDENTIFIER (EQUAL verb)* textElement? textElement? LBRACE verbCommand* RBRACE ;
+placeDirective : PLACE IDENTIFIER (EQUAL verb)* textElement? textElement? LBRACE objectCommand* RBRACE ;
 
-objectDirective : OBJECT SUB? IDENTIFIER (EQUAL verb)* textElement textElement? textElement? LBRACE verbCommand* RBRACE ;
+objectDirective : OBJECT SUB? IDENTIFIER (EQUAL verb)* textElement textElement? textElement? LBRACE objectCommand* RBRACE ;
 
 actionDirective : ACTION arg1=verb (arg2=verb)? block ;
 
@@ -82,15 +85,19 @@ flagType
     | PLACE
     ;
 
-flagClause : IDENTIFIER (EQUAL IDENTIFIER)* ;
+flagDeclarator : IDENTIFIER (EQUAL IDENTIFIER)* ;
 
-stateClause : IDENTIFIER (EQUAL expression)? ;
+stateDeclarator : IDENTIFIER (EQUAL expression)? ;
 
 verb : STRING_LITERAL ;
 
 globalDeclarator
-    : IDENTIFIER
+    : IDENTIFIER (EQUAL expression)?
     | IDENTIFIER LBRACK NUM_LITERAL RBRACK
+    ;
+
+referenceDeclarator
+    : IDENTIFIER (EQUAL IDENTIFIER)?
     ;
 
 method
@@ -102,12 +109,22 @@ method
 
 textElement : TEXT_BLOCK | STRING_LITERAL ;
 
-verbCommand : verb COLON block ;
-
+objectCommand
+    : variableDirective
+    | referenceDirective
+    | procDirective
+    | actionDirective
+    ;
 
 optionalParameterList
     : LPAREN RPAREN
-    | LPAREN IDENTIFIER (COMMA IDENTIFIER)* RPAREN
+    | LPAREN parameterType IDENTIFIER (COMMA parameterType IDENTIFIER)* RPAREN
+    ;
+
+parameterType
+    : VAR
+    | TEXT
+    | REF
     ;
 
 // Code block and statements
@@ -121,6 +138,7 @@ statement
     | emptyStatement
     | localVariableDeclarationStatement
     | expressionStatement
+    | flagStatement
     | breakStatement
     | continueStatement
     | returnStatement
@@ -140,7 +158,7 @@ localVariableDeclarationStatement
     ;
 
 localVariableDeclaration
-    : VAR variableDeclarator (COMMA variableDeclarator)*
+    : (VAR|REF) variableDeclarator (COMMA variableDeclarator)*
     ;
 
 variableDeclarator
@@ -149,6 +167,10 @@ variableDeclarator
 
 expressionStatement
     : statementExpression SEMI
+    ;
+
+flagStatement
+    : (SETFLAG | CLEARFLAG) flagExpression SEMI
     ;
 
 statementExpression
@@ -188,7 +210,7 @@ statementExpressionList
     ;
 
 enhancedForStatement
-    : optionalLabel FOR LPAREN VAR IDENTIFIER COLON expression RPAREN block
+    : optionalLabel FOR LPAREN (REF|VAR) IDENTIFIER COLON expression RPAREN block
     ;
 
 optionalLabel
@@ -208,9 +230,7 @@ returnStatement
     : RETURN expression? SEMI
     ;
 
-/*
- * Expressions
- */
+// Expressions
 
 expression
     : conditionalExpression
@@ -223,7 +243,6 @@ assignment
 
 lvalue
     : identifierReference
-    | derefExpression
     | arrayAccess
     ;
 
@@ -325,8 +344,6 @@ preIncrementOrDecrementExpression
 unaryExpressionNotPlusMinus
     : primary
     | postIncrementOrDecrementExpression
-    | refExpression
-    | derefExpression
     | TILDE unaryExpression
     | BANG unaryExpression
     ;
@@ -343,10 +360,12 @@ primary
     | arrayAccess
     | functionInvocation
     | instanceofExpression
+    | flagExpression
     ;
 
 identifierReference
     : IDENTIFIER
+    | THIS
     ;
 
 literal
@@ -382,7 +401,6 @@ internalFunction
     | APPORT
     | ATPLACE
     | CHANCE
-    | CLEARFLAG
     | DESCRIBE
     | DROP
     | FLUSH
@@ -391,11 +409,9 @@ internalFunction
     | INPUT
     | IN
     | ISAT
-    | ISFLAG
     | HAVE
     | ISHERE
     | ISNEAR
-    | ISVERB
     | KEY
     | MOVE
     | NEEDCMD
@@ -405,25 +421,20 @@ internalFunction
     | RESPOND
     | SAY
     | SAYRANDOM
-    | SETFLAG
     | SMOVE
+    | STRCMP
     | STOP
-    | TIE
     | USERTYPED
     | VARIS
     | VOCAB
     ;
 
-refExpression
-    : BITAND IDENTIFIER
-    ;
-
-derefExpression
-    : MUL IDENTIFIER
-    ;
-
 instanceofExpression
     : IDENTIFIER INSTANCEOF refType
+    ;
+
+flagExpression
+    : identifierReference COLON primary
     ;
 
 refType

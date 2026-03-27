@@ -35,6 +35,7 @@ VERB : 'verb' ;
 ACTION : 'action' ;
 VARIABLE : 'variable' ;
 ARRAY : 'array' ;
+REFERENCE : 'reference' ;
 PROC : 'proc' ;
 INITIAL : 'initial' ;
 REPEAT : 'repeat' ;
@@ -49,8 +50,10 @@ ELSE        : 'else';
 FOR         : 'for';
 IF          : 'if';
 INSTANCEOF  : 'instanceof';
+REF         : 'ref';
 RETURN      : 'return';
 SWITCH      : 'switch';
+THIS        : 'this';
 TO          : 'to';
 UNTIL       : 'until';
 VAR         : 'var';
@@ -76,7 +79,6 @@ ISFLAG : 'isflag' ;
 HAVE : 'have' ;
 ISHERE : 'ishere' ;
 ISNEAR : 'isnear' ;
-ISVERB : 'isverb' ;
 KEY : 'key' ;
 MOVE : 'move' ;
 NEEDCMD : 'needcmd' ;
@@ -89,7 +91,7 @@ SAYRANDOM : 'sayrandom' ;
 SETFLAG : 'setflag' ;
 SMOVE : 'smove' ;
 STOP : 'stop' ;
-TIE : 'tie' ;
+STRCMP : 'strcmp' ;
 USERTYPED : 'usertyped' ;
 VARIS : 'varis' ;
 VOCAB : 'vocab' ;
@@ -118,6 +120,7 @@ LBRACK : '[';
 RBRACK : ']';
 SEMI   : ';';
 COMMA  : ',';
+PERIOD : '.';
 
 // Operators
 
@@ -184,7 +187,7 @@ fragment HexDigit: [0-9a-fA-F];
 
 fragment Digits: [0-9]+;
 
-fragment IdentifierCharacter: Letter | [0-9] | '.';
+fragment IdentifierCharacter: Letter | [0-9];
 
 fragment Letter:
     [a-zA-Z$_]                        // these are the "java letters" below 0x7F
