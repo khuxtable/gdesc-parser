@@ -69,6 +69,8 @@ objectDirective : OBJECT SUB? IDENTIFIER (EQUAL verb)* textElement textElement? 
 
 actionDirective : ACTION arg1=verb (arg2=verb)? block ;
 
+messageDirective : MESSAGE name=IDENTIFIER block ;
+
 procDirective : PROC name=IDENTIFIER optionalParameterList? block ;
 
 initialDirective : INITIAL block ;
@@ -112,8 +114,10 @@ textElement : TEXT_BLOCK | STRING_LITERAL ;
 objectCommand
     : variableDirective
     | referenceDirective
+    | initialDirective
     | procDirective
     | actionDirective
+    | messageDirective
     ;
 
 optionalParameterList
@@ -388,6 +392,7 @@ functionInvocation
     : IDENTIFIER LPAREN optionalExpressionList RPAREN
     | STRING_LITERAL LPAREN optionalExpressionList RPAREN
     | internalFunction LPAREN optionalExpressionList RPAREN
+    | identifierReference PERIOD IDENTIFIER LPAREN optionalExpressionList RPAREN
     ;
 
 optionalExpressionList

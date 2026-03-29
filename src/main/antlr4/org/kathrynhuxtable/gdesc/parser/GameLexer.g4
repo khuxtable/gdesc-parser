@@ -33,6 +33,7 @@ OBJECT : 'object' ;
 NOISE : 'noise' ;
 VERB : 'verb' ;
 ACTION : 'action' ;
+MESSAGE : 'message' ;
 VARIABLE : 'variable' ;
 ARRAY : 'array' ;
 REFERENCE : 'reference' ;
